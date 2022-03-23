@@ -1,11 +1,7 @@
 import fs from 'fs';
-import Koa from 'koa';
-import Router from '@koa/router';
+import http from 'http';
 import render from 'preact-render-to-string';
 import Fox from './components/Fox.jsx';
-
-const app = new Koa();
-const router = new Router();
 
 const js = fs.readFileSync('dist/client.js', 'utf8');
 const data = { name: 'fox' };
@@ -27,9 +23,10 @@ const html = (content, data) => `<!DOCTYPE html>
 </body>
 </html>`;
 
-router.get('/', async (ctx) => {
-  const content = render(Fox(data));
-  ctx.body = html(content, data);
-});
-
-app.use(router.routes()).use(router.allowedMethods()).listen(3000);
+http
+  .createServer((req, res) => {
+    const content = render(Fox(data));
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end(html(content, data));
+  })
+  .listen(3000);

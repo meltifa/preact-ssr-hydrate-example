@@ -22,7 +22,7 @@ const server = {
     format: 'es'
   },
   plugins: [rollupBabelPlugin],
-  external: ['fs', ...Object.keys(pkg.dependencies)]
+  external: ['fs', 'http', ...Object.keys(pkg.dependencies)]
 };
 const client = {
   input: 'src/client.js',
